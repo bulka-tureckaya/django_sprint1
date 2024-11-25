@@ -49,12 +49,17 @@ def index(request):
     context = {'index': posts[::-1]}
     return render(request, template, context)
 
-
 def post_detail(request, id):
+    # Проверка существования поста с данным id
+    post = next((post for post in posts if post['id'] == id), None)
+    
+    if post is None:
+        # Если пост не найден, возвращаем 404 ошибку
+        return render(request, '404.html', status=404)
+    
     template = 'blog/detail.html'
-    context = {'post': posts[id]}
+    context = {'post': post}
     return render(request, template, context)
-
 
 def category_posts(request, category_slug):
     template = 'blog/category.html'
